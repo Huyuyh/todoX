@@ -5,8 +5,26 @@ import Header from '@/components/Header';
 import StatsAndFilters from '@/components/StatsAndFilters';
 import TaskList from '@/components/TaskList';
 import TaskListPagination from '@/components/TaskListPagination';
+import api from '@/lib/axios';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 
 const HomePage = () => {
+  const { data } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: () => api.get('/tasks').then((res) => res.data),
+  });
+
+  const [filter, setFilter] = useState('all');
+
+  const { tasks = [], activeCount = 0, completeCount = 0 } = data ?? {};
+
+  const filteredTasks = useMemo(() => {
+    if (filter === 'complete') return tasks.filter((task) => task.completed);
+    if (filter === 'active') return tasks.filter((task) => !task.completed);
+    return tasks;
+  }, [tasks, filter]);
+
   return (
     <div className="min-h-screen w-full bg-[#fefcff] relative">
       {/* Dreamy Sky Pink Glow */}
@@ -24,14 +42,19 @@ const HomePage = () => {
           <Header />
 
           <AddTask />
-          <StatsAndFilters />
-          <TaskList />
+          <StatsAndFilters
+            activeTaskCount={activeCount}
+            completedTaskCount={completeCount}
+            filter={filter}
+            setFilter={setFilter}
+          />
+          <TaskList filteredTasks={filteredTasks} />
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <TaskListPagination />
             <DateTimeFilter />
           </div>
 
-          <Footer />
+          <Footer activeTasksCount={activeCount} completedTasksCount={completeCount} />
         </div>
       </div>
     </div>
