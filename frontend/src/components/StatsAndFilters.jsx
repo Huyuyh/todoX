@@ -3,7 +3,7 @@ import { Filter } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
-const StatsAndFilters = ({ completedTaskCount = 0, activeTaskCount = 0, filter = 'all', setFilter }) => {
+const StatsAndFilters = ({ completedTaskCount = 0, activeTaskCount = 0, filter = 'all', handleSetFilter }) => {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
       <div className="flex gap-3">
@@ -24,7 +24,7 @@ const StatsAndFilters = ({ completedTaskCount = 0, activeTaskCount = 0, filter =
               size="sm"
               className="capitalize"
               onClick={() => {
-                setFilter(type);
+                handleSetFilter(type);
               }}
             >
               <Filter className="size-4" />

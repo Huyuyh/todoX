@@ -27,6 +27,11 @@ const AddTask = () => {
     if (!newTaskTitle.trim()) return;
     createTaskMutation.mutate(newTaskTitle);
   };
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleAddTask();
+    }
+  };
 
   return (
     <Card className="p-6 border-0 bg-gradient-card shadow-custom-lg">
@@ -36,6 +41,7 @@ const AddTask = () => {
           placeholder="What do you need to do?"
           className="h-12 text-base bg-slate-50 sm:flex-1 border-border/50 focus:border-primary/50 focus:ring-primary/20"
           value={newTaskTitle}
+          onKeyPress={handleKeyPress}
           onChange={(e) => {
             setNewTaskTitle(e.target.value);
           }}
